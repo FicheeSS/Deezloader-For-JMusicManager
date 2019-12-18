@@ -41,7 +41,7 @@ if __name__ == "__main__":
             sys.exit("Impossible to write the output file")
         for error in errors :
             outputFile.write(error)
-        sys.exit(download.getError())
+        sys.exit(error)
     else : 
         sys.exit(0)
 

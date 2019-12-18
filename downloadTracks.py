@@ -17,11 +17,11 @@ parser.add_argument(dest='key', metavar='k', type=str,
 args = parser.parse_args()
 
 if __name__ == "__main__":
-    errors = ""
+    errors = "" 
     cwd = args.downloadLoc
     download = Downloader(args.key)
     errors = download.getError()
-    if (errors == ""):   
+    if (errors == "" and args.key != ""):   
         tracks = []
         output = []
         try : 
