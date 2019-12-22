@@ -25,6 +25,7 @@ import multiprocessing
 FORBIDEN_CHAR = [(":", "_"), ("<", "_"), (">", "_"), ("&", "_"), ("|", "_")]
 URL_CARSET = [("ä", "a"), ("'", ""), (",", ""), ("/", "-"), (".", ""), ("û", "u"),
               ("ü", "u"), ("ù", "u"), ("?", ""), (":", ""), ("ö", "o"), ("ô", "o"), ("_", "")]
+RESSOURCES_NAME = ["Album","Track","Artist" ]
 
 
 class Downloader():
@@ -50,13 +51,17 @@ class Downloader():
         return self.strLastError
 
     def DownloadTracksFromAlbum(self,id, cwd):
+        #get a the album.resource objet from the id 
         album = self.getAlbumFromID(id)
-        if(album != ""):
+        if  not not album:
+            #get a list of track.resource objet
             RList = album.get_tracks()
             idList = []
+            #get the track id from the resource 
             for rs in RList:
                 time.sleep(0.1)
                 idList.append(rs.get_id())
+            #handler of the download 
             error = self.DownloadByTrackResource(idList, cwd)
             if(not not error):
                 return self.strLastError
@@ -66,11 +71,13 @@ class Downloader():
             pass
 
     def clearFromIllegalChars(self, tobeclean):
+        #remove all problematic chars
         for char in FORBIDEN_CHAR:
             tobeclean = tobeclean.replace(char[0], char[1])
         return tobeclean
 
     def downloadAlbums(self, ids, cwd):
+        #handler of multiples albums to be downloaded
         output = []
         for id in ids:
             time.sleep(0.1)
@@ -78,10 +85,12 @@ class Downloader():
         return output
 
     def getAlbumsFromArtist(self, artist):
+        #search all the available album from a artist 
         artist = self.clearFromIllegalChars(artist)
         return self.client.advanced_search({"Artist": artist}, limit=1000, relation="album")
 
     def getAlbumResourceFromAlbumArtist(self, artist, albums):
+        #get album.resource from album list
         result = []
         artist = self.clearFromIllegalChars(artist)
         for album in albums:
@@ -92,6 +101,7 @@ class Downloader():
         return result
 
     def searchMissingAlbums(self, artist, albums=""):
+        #search all the missing album available from the given artist 
         alreadyAlbums = self.getAlbumResourceFromAlbumArtist(artist, albums)
         allAlbumsAv = self.getAlbumsFromArtist(artist)
         result = False
@@ -106,6 +116,7 @@ class Downloader():
         return toBeDwlAlbums
 
     def DownloadByTrackResource(self, tracksid, cwd):
+        #multithreading the download
         jobs = []
         for track in tracksid:
             p = multiprocessing.Process(
@@ -121,6 +132,7 @@ class Downloader():
             return ""
 
     def DownloadByTrackName(self, trackid, dwl, cwd):
+        #final downloader to be multithreaded
         try:
             dwl.download_trackdee(
                 "https://www.deezer.com/fr/track/"+str(trackid),
@@ -153,29 +165,53 @@ class Downloader():
             return s[0].get_id()
 
     def searchTracksFromAlbumName(self, artist, album):
+        print("Artist : "+ str(artist) + ", album : "+ str(album))
         s = self.client.advanced_search(
             {"Artist": artist, "Album": album}, limit=50, relation="track")
         if not not s:
             return s
+        else :
+            return ""
 
     def getTrackIdFromTrackName(self, artist, track):
         s = self.client.advanced_search(
             {"Artist": artist, "Track": track}, limit=1, relation="track")
         if not not s:
             return s[0].get_id()
+        else :
+            return ""
 
     def getTrackFromID(self,trackid):
         track = self.client.get_tracks(trackid)
         print(track)
         return track
+
     def getAlbumFromID(self,albumid):
+        if type(albumid) is list : 
+            albumid = albumid[0]
         album = self.client.get_album(albumid)
         print(album)
         return album
+
     def getArtistFromID(self,id):
         artist = self.client.get_artist(id)
         print(artist)
         return artist
+    
+    def getGenreFromId(self,id):
+        return self.client.get_genre(id)
+    
+    def getArtistFromAlbumId(self,id):
+        album = self.clearStrForSearch(self.getAlbumFromID(id))
+        artist = self.clearStrForSearch(self.client.advanced_search(
+            {"Album": album}, limit=1, relation="artist"))
+        if not not artist :
+            return self.clearStrForSearch(artist)
+            
+    def clearStrForSearch(self,string):
+        for ressource in RESSOURCES_NAME:
+            string = str(string).replace(ressource+": " , "").replace("<","").replace(">","") 
+        return string
 """
 downloa.download_name(
 	artist = "Eminem",

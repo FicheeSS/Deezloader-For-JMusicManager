@@ -4,8 +4,6 @@ from downloader import Downloader
 import sys 
 
 parser = argparse.ArgumentParser()
-parser.add_argument(dest='artist', metavar='a', type=str,
-                    help='artist name')
 parser.add_argument(dest='csvLoc', metavar='c', type=str,
                     help='csv location')
 parser.add_argument(dest='downloadLoc', metavar='d', type=str,
@@ -22,19 +20,24 @@ if __name__ == "__main__":
     download = Downloader(args.key)
     errors = download.getError()
     if (errors == "" and args.key != ""):   
-        unsplits = []
+        inputAlbum = []
         try : 
             csvfile = open(args.csvLoc,"r")
             csvReader = csv.reader(csvfile,delimiter="\n")
         except OSError :
             sys.exit("Impossible to read the csv")
         for row in csvReader:
-            unsplits.append(row)
-            inputAlbum = []
-        for unsplit in unsplits :
-            tmp = unsplit[0].split("\t")
-            inputAlbum.append(tmp[1])
-        print(inputAlbum)
+            inputAlbum.append(row)
+        unsplit = inputAlbum.copy()
+        split = []
+        #can be use with only the id or with the name before
+        for t in unsplit :
+            tmp = t[0].split("\t")
+            try : 
+                split.append(tmp[1])
+            except IndexError:
+                split.append(tmp[0])
+        inputAlbum = split.copy()
         errors = download.downloadAlbums(inputAlbum,cwd)
     if(errors != "" ):
         try : 
