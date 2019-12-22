@@ -18,8 +18,8 @@ if __name__ == "__main__":
     errors = download.getError()
     id = args.id  
     if (errors == ""):
-        album  = download.getAlbumFromID(id)
-        artist = download.getArtistFromAlbumId(id)
+        album  = download.clearStrForSearch(download.getAlbumResourceFromID(id))
+        artist = download.getArtistNameFromAlbumId(id)
         tracks = download.searchTracksFromAlbumName(artist,album)
         print(tracks)
         try : 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
             track = str(track).replace("Track: " , "").replace("<","").replace(">","") 
             id = str(download.getTrackIdFromTrackName(artist,track))
             if(id.lower() != 'none'):
-                output.append(track + "\t" + id + "\t" + download.getGenreFromId(id))
+                output.append(track + "\t" + id)
         csvWriter.writerow(output)
     if(errors != "" ):
         try : 

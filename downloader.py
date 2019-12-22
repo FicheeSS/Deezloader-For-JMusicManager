@@ -52,7 +52,7 @@ class Downloader():
 
     def DownloadTracksFromAlbum(self,id, cwd):
         #get a the album.resource objet from the id 
-        album = self.getAlbumFromID(id)
+        album = self.getAlbumResourceFromID(id)
         if  not not album:
             #get a list of track.resource objet
             RList = album.get_tracks()
@@ -181,30 +181,15 @@ class Downloader():
         else :
             return ""
 
-    def getTrackFromID(self,trackid):
-        track = self.client.get_tracks(trackid)
-        print(track)
-        return track
-
-    def getAlbumFromID(self,albumid):
-        if type(albumid) is list : 
-            albumid = albumid[0]
+    def getAlbumResourceFromID(self,albumid): 
         album = self.client.get_album(albumid)
-        print(album)
         return album
 
-    def getArtistFromID(self,id):
-        artist = self.client.get_artist(id)
-        print(artist)
-        return artist
     
-    def getGenreFromId(self,id):
-        return self.client.get_genre(id)
-    
-    def getArtistFromAlbumId(self,id):
-        album = self.clearStrForSearch(self.getAlbumFromID(id))
-        artist = self.clearStrForSearch(self.client.advanced_search(
-            {"Album": album}, limit=1, relation="artist"))
+    def getArtistNameFromAlbumId(self,id):
+        name = self.clearStrForSearch(self.getAlbumResourceFromID(id))
+        tmp = name.split("-")
+        artist = tmp[0]
         if not not artist :
             return self.clearStrForSearch(artist)
             
