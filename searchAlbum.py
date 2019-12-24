@@ -27,12 +27,10 @@ if __name__ == "__main__":
         output = []
         for album in Albums: 
             album = str(album).replace("Album: " , "").replace("<","").replace(">","") 
-
             if album.lower != "none":
                 id = str(download.getAlbumIdFromAlbumName(artist,album))
                 if(id.lower() != 'none'):
                     output.append(album + "\t" + id )
-
         csvWriter.writerow(output)
     if(errors != "" ):
         try : 
