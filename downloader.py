@@ -122,7 +122,7 @@ class Downloader():
             p = multiprocessing.Process(
                 target=self.DownloadByTrackName, args=(track, self.downloa, cwd))
             p.start()
-            time.sleep(0.1)
+            time.sleep(0.5)
             jobs.append(p)
         for proc in jobs:
             proc.join()
