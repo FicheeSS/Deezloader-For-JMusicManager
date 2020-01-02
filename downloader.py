@@ -30,13 +30,12 @@ RESSOURCES_NAME = ["Album","Track","Artist" ]
 
 class Downloader():
     def __init__(self, key=""):
+        self.key = key 
         self.client = deezer.Client()
         self.strLastError = ""
-        self.notfound = []
-        self.error = ""
-        if key != "":
+        if self.key != "":
             try:
-                self.downloa = deezloader.Login(key)
+                self.downloa = deezloader.Login(self.key)
             except socket.gaierror:
                 self.strLastError = "Impossible to connect to internet"
                 sys.exit("Impossible to connect to the internet please check your internet connection")
@@ -78,11 +77,14 @@ class Downloader():
 
     def downloadAlbums(self, ids, cwd):
         #handler of multiples albums to be downloaded
-        output = []
-        for id in ids:
-            time.sleep(0.1)
-            output.append(self.DownloadTracksFromAlbum(id, cwd))
-        return output
+        if self.key != "" : 
+            output = []
+            for id in ids:
+                time.sleep(0.1)
+                output.append(self.DownloadTracksFromAlbum(id, cwd))
+            return output
+        else :
+            sys.exit("Key is empty")
 
     def getAlbumsFromArtist(self, artist):
         #search all the available album from a artist 
@@ -147,7 +149,6 @@ class Downloader():
             self.strLastError = "Bad Encoding"
         except exceptions.TrackNotFound:
             print("Track Not found ")
-            self.notfound.append(trackid)
         except exceptions.BadCredentials:
             print("Invalid credidentials")
             self.strLastError = "Wrong credidentials check arl"
