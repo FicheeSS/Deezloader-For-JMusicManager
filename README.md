@@ -9,7 +9,7 @@ You can get an arl key by following this [link](https://notabug.org/RemixDevs/De
 ```
 python searchAlbum.py artistName ./file.csv ./errors.txt
 ```
- ## Search for all Track of an Album
+ ## Search for all Tracks of an Album
  
  ```
  python searchTrack.py albumId ./file.csv ./errors.txt
