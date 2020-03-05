@@ -11,7 +11,7 @@ import requests
 
 from lib.deezeloader import exceptions 
 from lib import deezer as deezer
-from lib import deezeloader as deezerloader
+from lib import deezeloader as deezloader
 
 FORBIDEN_CHAR = [(":", "_"), ("<", "_"), (">", "_"), ("&", "_"), ("|", "_")]
 URL_CARSET = [("ä", "a"), ("'", ""), (",", ""), ("/", "-"), (".", ""), ("û", "u"),
@@ -29,13 +29,13 @@ class Downloader():
                 self.downloa = deezloader.Login(self.key)
             except socket.gaierror:
                 self.strLastError = "Impossible to connect to internet"
-                sys.exit("Impossible to connect to the internet please check your internet connection")
+                print("Impossible to connect to the internet please check your internet connection")
             except requests.exceptions.ConnectionError:
                 self.strLastError = "Impossible to connect to internet"
-                sys.exit("Impossible to connect to the internet please check your internet connection")
+                print("Impossible to connect to the internet please check your internet connection")
             except exceptions.BadCredentials:
                 self.strLastError = "Wrong ARL"
-                sys.exit("Check Arl")
+                print("Check Arl")
 
 
     def DownloadTracksFromAlbum(self,id, cwd):
