@@ -1,26 +1,17 @@
 # coding: utf8
-import sys
-import os
-import time
-import requests
-import socket
-import os
-
-try : 
-    lib_path = os.path.abspath("./lib/")
-    sys.path.insert(0, lib_path)
-    if(sys.path[0] != lib_path):
-        sys.exit("???")    
-    from deezloader import exceptions
-    import deezer
-    import deezloader   
-except ModuleNotFoundError :
-    sys.exit("Module not found check the import") 
-
-from pathlib import Path
-from os import path
 import multiprocessing
+import os
+import socket
+import sys
+import time
+from os import path
+from pathlib import Path
 
+import requests
+
+from lib.deezeloader import exceptions 
+from lib import deezer as deezer
+from lib import deezeloader as deezerloader
 
 FORBIDEN_CHAR = [(":", "_"), ("<", "_"), (">", "_"), ("&", "_"), ("|", "_")]
 URL_CARSET = [("ä", "a"), ("'", ""), (",", ""), ("/", "-"), (".", ""), ("û", "u"),
@@ -46,8 +37,6 @@ class Downloader():
                 self.strLastError = "Wrong ARL"
                 sys.exit("Check Arl")
 
-    def getError(self):
-        return self.strLastError
 
     def DownloadTracksFromAlbum(self,id, cwd):
         #get a the album.resource objet from the id 
@@ -67,13 +56,7 @@ class Downloader():
             else:
                 return ""
         else:
-            pass
-
-    def clearFromIllegalChars(self, tobeclean):
-        #remove all problematic chars
-        for char in FORBIDEN_CHAR:
-            tobeclean = tobeclean.replace(char[0], char[1])
-        return tobeclean
+            self.strLastError =  "Impossible to find the album with the provided id  : " + id 
 
     def downloadAlbums(self, ids, cwd):
         #handler of multiples albums to be downloaded
@@ -159,6 +142,18 @@ class Downloader():
             print("Key Error")
             self.strLastError = "Key Error"
 
+    #########################################################################
+    ##
+    ## Some tools to help manage the data
+    ##
+    ##########################################################################
+
+    def clearFromIllegalChars(self, tobeclean):
+        #remove all problematic chars
+        for char in FORBIDEN_CHAR:
+            tobeclean = tobeclean.replace(char[0], char[1])
+        return tobeclean
+        
     def getAlbumIdFromAlbumName(self, artist, album):
         s = self.client.advanced_search(
             {"Artist": artist, "Album": album}, limit=1, relation="album")
@@ -198,6 +193,9 @@ class Downloader():
         for ressource in RESSOURCES_NAME:
             string = str(string).replace(ressource+": " , "").replace("<","").replace(">","") 
         return string
+
+    def getError(self):
+        return self.strLastError
 """
 downloa.download_name(
 	artist = "Eminem",

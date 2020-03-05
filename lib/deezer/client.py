@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 
 import requests
 
-from deezer.resources import (
+from lib.deezer.resources import (
     Album,
     Artist,
     Chart,
@@ -17,7 +17,7 @@ from deezer.resources import (
     Track,
     User,
 )
-from deezer.utils import SortedDict
+from lib.deezer.utils import SortedDict
 
 
 class Client:

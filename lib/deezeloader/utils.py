@@ -6,7 +6,7 @@ from requests import get
 from mutagen import File
 from spotipy import oauth2
 from Crypto.Hash import MD5
-from deezloader import exceptions
+from lib.deezeloader import exceptions
 from collections import OrderedDict
 from binascii import a2b_hex, b2a_hex
 from Crypto.Cipher import AES, Blowfish

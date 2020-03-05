@@ -4,8 +4,8 @@ Implements several classes to interact with all types of Deezer objects,
 do some searches, and build application written in Python on top of it
 
 """
-from deezer.client import Client
-from deezer.resources import (
+from lib.deezer.client import Client
+from  lib.deezer.resources import (
     Album,
     Artist,
     Comment,

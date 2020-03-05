@@ -4,9 +4,9 @@ import os
 from tqdm import tqdm
 from spotipy import Spotify
 from requests import Session
-from deezloader import exceptions
+from lib.deezeloader.exceptions import *
 
-from deezloader.utils import (
+from lib.deezeloader.utils import (
 	decryptfile, genurl,
 	calcbfkey, write_tags,
 	var_excape, request,
