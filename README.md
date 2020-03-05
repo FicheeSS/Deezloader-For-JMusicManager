@@ -7,28 +7,34 @@ You can get an arl key by following this [link](https://notabug.org/RemixDevs/De
 
 ## Search For all the Albums of an Artist  
 ```
-searchAlbum.py artistName ./file.csv ./errors.txt
+python searchAlbum.py artistName ./file.csv ./errors.txt
 ```
  ## Search For a Specific Track 
  
  ```
- searchTrack.py albumId ./file.csv ./errors.txt
+ python searchTrack.py albumId ./file.csv ./errors.txt
  ```
  
  ## Download albums 
  ```
- downloadAlbums.py ./file.csv ./download/ ./errors.txt arlKey
+ python downloadAlbums.py ./file.csv ./download/ ./errors.txt arlKey
  ```
  
  ## Download a specific track 
  Please prefer the downloadAlbum method because the downloading of tracks is not multithreaded and much more slower.
  ```
- downloadTracks.py ./file.csv ./download/ ./errors.txt arlKey 
+ python downloadTracks.py ./file.csv ./download/ ./errors.txt arlKey 
  ```
+ ## Autodownloader (work in progress)
+ Check every 2 minutes for a new csv file in the csvFolder and download all the albums found inside 
+  ```
+  python autodownloader.py ./csvFolder/ ./downloadLoc/ ./errors.txt arlKey
+  ```
+  
   # Simple Use
   If you just want to download all the albums of the artist Art in the folder Music with your arlKey : 
  ```
- searchAlbums.py Art ./csv.csv ./e.txt && downloadAlbums.py ./csv.csv ./Music/ ./e.txt arlKey   
+ python searchAlbums.py Art ./csv.csv ./e.txt && python downloadAlbums.py ./csv.csv ./Music/ ./e.txt arlKey   
  ```
  # Dependecies 
  Build using  :
