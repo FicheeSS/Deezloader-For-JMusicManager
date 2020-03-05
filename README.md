@@ -9,18 +9,18 @@ You can get an arl key by following this [link](https://notabug.org/RemixDevs/De
 ```
 python searchAlbum.py artistName ./file.csv ./errors.txt
 ```
- ## Search For a Specific Track 
+ ## Search for all Track of an Album
  
  ```
  python searchTrack.py albumId ./file.csv ./errors.txt
  ```
  
- ## Download albums 
+ ## Download Albums 
  ```
  python downloadAlbums.py ./file.csv ./download/ ./errors.txt arlKey
  ```
  
- ## Download a specific track 
+ ## Download a specific Tracks
  Please prefer the downloadAlbum method because the downloading of tracks is not multithreaded and much more slower.
  ```
  python downloadTracks.py ./file.csv ./download/ ./errors.txt arlKey 
