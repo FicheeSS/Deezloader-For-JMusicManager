@@ -4,6 +4,7 @@ import os
 import glob 
 import time
 import sys 
+import csv
 parser = argparse.ArgumentParser()
 parser.add_argument(dest='csvLoc', metavar='c', type=str,
                     help='lookup folder location')
@@ -24,9 +25,12 @@ if __name__ == "__main__":
     download = Downloader(args.key)
     errors = download.getError()
     os.chdir(csvLoc)
+    errorFileLoc = args.error
     if(errors != "" ):
-        try : 
-            outputFile = open(args.error,"w")
+        try :
+            if os.path.exists(errorFileLoc):
+                os.remove(errorFileLoc)
+            outputFile = open(errorFileLoc,"w")
         except OSError :
             sys.exit("Impossible to write the output file")
         for error in errors :
@@ -38,20 +42,22 @@ if __name__ == "__main__":
             print("Looking for new csv ...")
             csvList = []
             for file in glob.glob("*.csv"):
+                print("CSV file found : " + file)
                 csvList.append(file)
         except OSError as e :
             sys.exit(str(e) + "Cannot get to csv directory exiting ...")
         except :
             sys.exit("Input csv error exiting ...")
         if not not csvList :
-            print("CSV found processing ...")
-            for csvfile in csvList :  
+            print("Csv files found processing ...")
+            for csvfile in csvList :
+                print("Now processing  : " + str(csvfile))  
                 inputAlbum = []
                 try : 
-                    csvfile = open(args.csvLoc,"r")
-                    csvReader = csv.reader(csvfile,delimiter="\n")
-                except OSError :
-                    sys.exit("Impossible to read the csv")
+                    currentFile = open(csvfile,"r")
+                    csvReader = csv.reader(currentFile,delimiter="\n")
+                except OSError as e :
+                    sys.exit(str(e) + " \nImpossible to read the csv file : " + str(csvfile) + " exiting...")
                 for row in csvReader:
                     inputAlbum.append(row)
                 unsplit = inputAlbum.copy()
